@@ -4,23 +4,28 @@ using Portfolio_Backend.Models;
 
 namespace Portfolio_Backend.Services
 {
-	public class ArticleServicesPostgres : IArticleService
+	public class ArticleServicesPostgres : ArticleServiceAbstract
 	{
 		private readonly PortfolioContextPostgres _dbContextPostgres;
 		public ArticleServicesPostgres(PortfolioContextPostgres portfolioContextPostgres)
 		{
 			_dbContextPostgres = portfolioContextPostgres;
 		}
-		public List<ArticlePostgres> GetAllArticles()
+		public override IEnumerable<ArticlePostgres> GetAllArticles()
 		{
 			List<ArticlePostgres> articles = _dbContextPostgres.Articles.ToList();
 			return articles;
 		}
 
-		public ArticlePostgres GetArticleById(Guid id)
+		public override ArticlePostgres GetArticleById(Guid id)
 		{
 			ArticlePostgres article = _dbContextPostgres.Articles.FirstOrDefault(x => x.Id == id);
-			return article;
+			return article ?? throw new Exception("404 Article Not Found!");
+		}
+
+		public override IArticle GetArticleById(ObjectId id)
+		{
+			throw new NotImplementedException();
 		}
 	}
 }

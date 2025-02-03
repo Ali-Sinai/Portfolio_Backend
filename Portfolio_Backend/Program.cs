@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using Microsoft.OpenApi.Validations;
 using Portfolio_Backend.Context;
 using Portfolio_Backend.Services;
 
@@ -6,58 +7,62 @@ namespace Portfolio_Backend;
 
 public class Program
 {
-    public static void Main(string[] args)
-    {
-        var builder = WebApplication.CreateBuilder(args);
+	public static void Main(string[] args)
+	{
+		var builder = WebApplication.CreateBuilder(args);
 
-        // Add services to the container.
-        builder.Services.AddAuthorization();
+		// Add services to the container.
+		builder.Services.AddAuthorization();
 
-        builder.Services.AddControllers();
+		builder.Services.AddControllers();
 
-        // MongoDb
-        builder.Services.AddDbContext<PortfolioContextMongo>(options =>
-        {
-            options.UseMongoDB(
-                builder.Configuration.GetConnectionString("MongoDbConnectionString"),
-                "Portfolio");
-        });
-        
-        // Postgresql
-        builder.Services.AddDbContext<PortfolioContextPostgres>(options =>
-        {
-            options.UseNpgsql(builder.Configuration.GetConnectionString("PostgresConnectionString"));
-        });
-        
-        builder.Services.AddScoped<IArticleService, ArticleServicesMongo>();
-        
-        // add swagger
-        builder.Services.AddEndpointsApiExplorer();
-        builder.Services.AddSwaggerGen();
-        
-        // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
-        //builder.Services.AddOpenApi();
+		// MongoDb
+		builder.Services.AddDbContext<PortfolioContextMongo>(options =>
+		{
+			options.UseMongoDB(
+				builder.Configuration.GetConnectionString("MongoDbConnectionString"),
+				"Portfolio");
+		});
 
-        var app = builder.Build();
+		// Postgresql
+		builder.Services.AddDbContext<PortfolioContextPostgres>(options =>
+		{
+			var s = builder.Configuration.GetConnectionString("PostgresConnectionString");
 
-        // Configure the HTTP request pipeline.
-        if (app.Environment.IsDevelopment())
-        {
-            //app.MapOpenApi();
-        }
-        
-        app.MapControllers();
-        app.UseSwagger();
-        app.UseSwaggerUI(options =>
-        {
-            options.SwaggerEndpoint("/swagger/v1/swagger.json", "Portfolio API");
-            options.RoutePrefix = string.Empty;
-        });
+			options.UseNpgsql(s);
+		});
 
-        app.UseHttpsRedirection();
+		builder.Services.AddScoped<ArticleServiceAbstract, ArticleServicesMongo>();
+		builder.Services.AddScoped<ArticleServicesMongo>();
+		builder.Services.AddScoped<ArticleServicesPostgres>();
 
-        app.UseAuthorization();
+		// add swagger
+		builder.Services.AddEndpointsApiExplorer();
+		builder.Services.AddSwaggerGen();
 
-        app.Run();
-    }
+		// Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
+		//builder.Services.AddOpenApi();
+
+		var app = builder.Build();
+
+		// Configure the HTTP request pipeline.
+		if (app.Environment.IsDevelopment())
+		{
+			//app.MapOpenApi();
+		}
+
+		app.MapControllers();
+		app.UseSwagger();
+		app.UseSwaggerUI(options =>
+		{
+			options.SwaggerEndpoint("/swagger/v1/swagger.json", "Portfolio API");
+			options.RoutePrefix = string.Empty;
+		});
+
+		app.UseHttpsRedirection();
+
+		app.UseAuthorization();
+
+		app.Run();
+	}
 }
