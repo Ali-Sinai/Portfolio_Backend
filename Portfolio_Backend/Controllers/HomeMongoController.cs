@@ -8,24 +8,24 @@ namespace Portfolio_Backend.Controllers;
 [ApiController]
 public class HomeMongoController : Controller
 {
-    private readonly IArticleService _articleService;
+    private readonly ArticleServiceAbstract _articleService;
 
     public HomeMongoController(ArticleServicesMongo articleService)
     {
         _articleService = articleService;
     }
     
-    [HttpGet("/blog")]
-    public IActionResult GetAllArticles()
+    [HttpGet("/v1/blog")]
+    public IEnumerable<IArticle> GetAllArticles()
     {
-        List<IArticle> articles = _articleService.GetAllArticles();
-        return Ok(articles);
+		IEnumerable<IArticle> articles = _articleService.GetAllArticles();
+        return articles;
     }
 
     [HttpGet("/article/v1/{id}")]
-    public IActionResult GetArticleById(ObjectId id)
+    public IArticle GetArticleById(ObjectId id)
     {
         IArticle article = _articleService.GetArticleById(id);
-        return Ok(article);
+        return article;
     }
 }
