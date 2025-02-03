@@ -5,6 +5,7 @@ namespace Portfolio_Backend.Services;
 
 public interface IArticleService
 {
-    List<Article> GetAllArticles();
-    Article GetArticleById(ObjectId id);
+    List<IArticle> GetAllArticles();
+    IArticle GetArticleById(ObjectId id);
+    IArticle GetArticleById(Guid id);
 }

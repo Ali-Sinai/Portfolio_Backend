@@ -2,7 +2,7 @@
 
 namespace Portfolio_Backend.Models;
 
-public class Article
+public class ArticleMongo : IArticle
 {
     public ObjectId Id { get; set; }
     public string Title { get; set; }

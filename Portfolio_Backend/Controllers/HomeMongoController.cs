@@ -6,11 +6,11 @@ using Portfolio_Backend.Services;
 namespace Portfolio_Backend.Controllers;
 
 [ApiController]
-public class HomeController : Controller
+public class HomeMongoController : Controller
 {
     private readonly IArticleService _articleService;
 
-    public HomeController(IArticleService articleService)
+    public HomeMongoController(ArticleServicesMongo articleService)
     {
         _articleService = articleService;
     }
@@ -18,14 +18,14 @@ public class HomeController : Controller
     [HttpGet("/blog")]
     public IActionResult GetAllArticles()
     {
-        List<Article> articles = _articleService.GetAllArticles();
+        List<IArticle> articles = _articleService.GetAllArticles();
         return Ok(articles);
     }
 
-    [HttpGet("/article/{id}")]
+    [HttpGet("/article/v1/{id}")]
     public IActionResult GetArticleById(ObjectId id)
     {
-        Article article = _articleService.GetArticleById(id);
+        IArticle article = _articleService.GetArticleById(id);
         return Ok(article);
     }
 }

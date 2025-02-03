@@ -16,11 +16,11 @@ public class PortfolioContextPostgres : DbContext
         
     }
     
-    public DbSet<Article> Articles { get; set; }
+    public DbSet<ArticlePostgres> Articles { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder.Entity<Article>(entity =>
+        modelBuilder.Entity<ArticlePostgres>(entity =>
         {
             entity.ToTable("Articles");
             entity.HasKey(e => e.Id);

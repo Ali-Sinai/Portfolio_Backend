@@ -29,7 +29,7 @@ public class Program
             options.UseNpgsql(builder.Configuration.GetConnectionString("PostgresConnectionString"));
         });
         
-        builder.Services.AddScoped<IArticleService, ArticleServices>();
+        builder.Services.AddScoped<IArticleService, ArticleServicesMongo>();
         
         // add swagger
         builder.Services.AddEndpointsApiExplorer();

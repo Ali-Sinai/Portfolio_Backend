@@ -16,11 +16,11 @@ public class PortfolioContextMongo : DbContext
         
     }
     
-    public DbSet<Article> Articles { get; set; }
+    public DbSet<ArticleMongo> Articles { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder.Entity<Article>(entity =>
+        modelBuilder.Entity<ArticleMongo>(entity =>
         {
             entity.ToCollection("Articles");
             
