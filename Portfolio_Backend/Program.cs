@@ -16,6 +16,15 @@ public class Program
 
 		builder.Services.AddControllers();
 
+		builder.Services.AddCors(options =>
+		{
+			options.AddPolicy(name: "AllowSources", policy => {
+				policy.AllowAnyHeader();
+				policy.AllowAnyOrigin();
+				policy.AllowAnyMethod();
+			});
+		});
+
 		// MongoDb
 		builder.Services.AddDbContext<PortfolioContextMongo>(options =>
 		{
@@ -58,6 +67,8 @@ public class Program
 			options.SwaggerEndpoint("/swagger/v1/swagger.json", "Portfolio API");
 			options.RoutePrefix = string.Empty;
 		});
+
+		app.UseCors("AllowSources");
 
 		app.UseHttpsRedirection();
 
